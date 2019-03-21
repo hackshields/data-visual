@@ -1,0 +1,16 @@
+{
+  "name": "Bar Card",
+  "template": "index.tpl",
+  "description": "Utilization Bar Card",
+  "container": "none",
+  "fields" : [
+    {
+      "label": "Data",
+      "type": "string",
+      "name": "data",
+      "default": "{$progress_data}",
+      "placeholder" : "Cloud function or variable name",
+      "required": true
+    }
+  ]
+}

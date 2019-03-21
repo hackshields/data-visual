@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="staticContent" height="100%" width="100%"
+     preserveAspectRatio="none" viewBox="0 0 32 32">
+
+
+    <path d="M 27.511719 0.59179688 L 15.935547 12.166016 L 4.5390625 0.76953125 L 0.79101562 4.5175781 L 12.1875 15.914062 L 0.640625 27.460938 L 4.3886719 31.208984 L 15.935547 19.662109 L 27.662109 31.388672 L 31.408203 27.640625 L 19.681641 15.914062 L 31.257812 4.3378906 L 27.511719 0.59179688 z "/>
+    <rect style="fill:none!important;stroke:none!important;pointer-events:all!important" x="0" y="0" width="32"
+          height="32"/>
+</svg>

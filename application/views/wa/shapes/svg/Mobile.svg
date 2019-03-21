@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="staticContent" height="100%" width="100%"
+	 preserveAspectRatio="none" viewBox="0 0 32 32">
+	<g id="Mobile">
+	<path fill="#666666" d="M23.5,0.1h-15C7,0.1,5.7,1.3,5.7,2.9v26.2c0,1.5,1.3,2.8,2.8,2.8h15c1.5,0,2.8-1.3,2.8-2.8V2.9
+		C26.3,1.3,25,0.1,23.5,0.1z M13.8,1.6h4.5C18.7,1.6,19,2,19,2.4c0,0.4-0.3,0.7-0.7,0.7h-4.5c-0.4,0-0.7-0.3-0.7-0.7
+		C13.1,2,13.4,1.6,13.8,1.6z M16,30.5c-0.9,0-1.6-0.7-1.6-1.6c0-0.9,0.7-1.5,1.6-1.5c0.9,0,1.6,0.7,1.6,1.5
+		C17.6,29.8,16.9,30.5,16,30.5z M23.8,26.5H8.3V4.4h15.5V26.5z"/>
+</g>
+
+<polygon style="fill:none!important;stroke:none!important;pointer-events:all!important" points="6,1 26,1 26,31 6,31" />
+</svg>

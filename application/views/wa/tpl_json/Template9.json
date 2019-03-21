@@ -1,0 +1,55 @@
+{
+    "type": "container",
+    "templateName":"Template9",
+    "items": [
+        {
+            "type": "scalingAbsolute",
+            "css": "templateBox aspectRatio_default",
+            "items": [
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz1",
+                    "style": {
+                        "top": "0%",
+                        "left": "0%",
+                        "right": "50%",
+                        "bottom": "50%"
+                    }
+                },
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz2",
+                    "css" :"noBorderLeft",
+                    "style": {
+                        "top": "0%",
+                        "left": "50%",
+                        "right": "0%",
+                        "bottom": "50%"
+                    }
+                },
+               	{
+                    "type": "templateDropZone",
+                    "templateName":"dz3",
+                    "css" :"noBorderTop",
+                    "style": {
+                        "top": "50%",
+                        "left": "0%",
+                        "right": "50%",
+                        "bottom": "0%"
+                    }
+                },
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz4",
+                    "css" :"noBorderLeft noBorderTop",
+                    "style": {
+                        "top": "50%",
+                        "left": "50%",
+                        "right": "0%",
+                        "bottom": "0%"
+                    }
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="staticContent" height="100%" width="100%"
+	 preserveAspectRatio="none" viewBox="0 0 32 32">
+
+
+<g id="Cloud">
+	<g>
+		<path fill="#666666" d="M32,18.7c0-4.2-3.4-7.5-7.5-7.5c-0.6,0-1.2,0.1-1.7,0.2c-1.4-3.3-4.7-5.6-8.5-5.6c-5,0-9,3.9-9.2,8.8
+			c-2.8,0.4-5,2.8-5,5.8c0,3.2,2.6,5.9,5.9,5.9h19v0C28.8,26,32,22.7,32,18.7z"/>
+	</g>
+</g>
+</svg>

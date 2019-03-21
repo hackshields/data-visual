@@ -1,0 +1,85 @@
+{
+	"templateName": "Infographics3",
+	"type": "scalingAbsolute",
+	"css": "templateBox aspectRatio_default infoGraphic",
+	"items": [{
+		"type": "templateDropZone",
+		"templateName": "dz5",
+		"style": {
+			"top": "0%",
+			"left": "0%",
+			"right": "0%",
+			"bottom": "95%"
+		}
+	}, {
+		"type": "templateDropZone",
+		"css": "noBorderTop",
+		"templateName": "dz1",
+		"style": {
+			"top": "5%",
+			"left": "0%",
+			"right": "0%",
+			"bottom": "75%"
+		}
+	}, {
+		"type": "templateDropZone",
+		"css": "noBorderTop",
+		"templateName": "dz6",
+		"style": {
+			"top": "25%",
+			"left": "0%",
+			"right": "0%",
+			"bottom": "70%"
+		}
+	}, {
+		"type": "templateDropZone",
+		"css": "noBorderTop",
+		"templateName": "dz2",
+		"style": {
+			"top": "30%",
+			"left": "0%",
+			"right": "0%",
+			"bottom": "50%"
+		}
+	}, {
+		"type": "templateDropZone",
+		"css": "noBorderTop",
+		"templateName": "dz7",
+		"style": {
+			"top": "50%",
+			"left": "0%",
+			"right": "0%",
+			"bottom": "45%"
+		}
+	}, {
+		"type": "templateDropZone",
+		"css": "noBorderTop",
+		"templateName": "dz3",
+		"style": {
+			"top": "55%",
+			"left": "0%",
+			"right": "0%",
+			"bottom": "25%"
+		}
+	}, {
+		"type": "templateDropZone",
+		"css": "noBorderTop",
+		"templateName": "dz8",
+		"style": {
+			"top": "75%",
+			"left": "0%",
+			"right": "0%",
+			"bottom": "20%"
+		}
+	}, {
+		"type": "templateDropZone",
+		"css": "noBorderTop",
+		"templateName": "dz4",
+		"style": {
+			"top": "80%",
+			"left": "0%",
+			"right": "0%",
+			"bottom": "0%"
+		}
+	}]
+}

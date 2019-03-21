@@ -1,0 +1,67 @@
+{
+    "type": "container",
+    "templateName":"Template11",
+    "items": [
+        {
+            "type": "scalingAbsolute",
+            "css": "templateBox aspectRatio_default",
+            "items": [
+               {
+                    "type": "templateDropZone",
+                    "templateName":"dz1",
+                    "style": {
+                        "top": "0%",
+                        "left": "0%",
+                        "right": "66.7%",
+                        "bottom": "75%"
+                    }
+                },
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz4",
+                    "css" :"noBorderLeft",
+                    "style": {
+                        "top": "0%",
+                        "left": "33.3%",
+                        "right": "33.4%",
+                        "bottom": "75%"
+                    }
+                },
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz5",
+                    "css" :"noBorderLeft",
+                    "style": {
+                        "top": "0%",
+                        "left": "66.6%",
+                        "right": "0%",
+                        "bottom": "75%"
+                    }
+                },
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz2",
+                    "css" :"noBorderTop",
+                    "style": {
+                        "top": "25%",
+                        "left": "0%",
+                        "right": "0%",
+                        "bottom": "37.5%"
+                    }
+                },
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz3",
+                    "css" :"noBorderTop",
+                    "style": {
+                        "top": "62.5%",
+                        "left": "0%",
+                        "right": "0%",
+                        "bottom": "0%"
+                    }
+                }
+                
+            ]
+        }
+    ]
+}

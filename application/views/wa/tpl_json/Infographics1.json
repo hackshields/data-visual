@@ -1,0 +1,16 @@
+{
+	"templateName": "Infographics1",
+	"type": "scalingAbsolute",
+	"css": "templateBox aspectRatio_default infoGraphic",
+
+	"items": [{
+		"type": "templateDropZone",
+		"templateName": "dz1",
+		"style": {
+			"top": "0%",
+			"left": "0%",
+			"right": "0%",
+			"bottom": "0%"
+		}
+	}]
+}

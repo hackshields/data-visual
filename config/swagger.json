@@ -1,0 +1,363 @@
+{
+  "swagger": "2.0",
+  "host": "dashboard.dbface.com",
+  "basePath": "/api/v8",
+  "tags": [
+    {
+      "name": "Global",
+      "description": "Global API of DbFace"
+    },
+    {
+      "name": "Cloud Function",
+      "description": "Access DbFace Cloud Function"
+    },
+    {
+      "name": "Poll",
+      "description": "API for accessing information stored in DbFace"
+
+    },
+    {
+      "name": "Warehouse",
+      "description": "API for accessing DbFace warehouse"
+
+    }
+  ],
+  "paths": {
+    "/ip": {
+      "get": {
+        "tags": [
+          "Global"
+        ],
+        "summary": "Get client location information by ip address",
+        "description": "",
+        "operationId": "getLocation",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "405": {
+            "description": "Invalid input"
+          }
+        }
+      }
+    },
+    "/ip/{ip_address}": {
+      "get": {
+        "tags": [
+          "Global"
+        ],
+        "summary": "Find location information by ip address",
+        "description": "Returns a location information",
+        "operationId": "getLocationByIP",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "ip_address",
+            "in": "path",
+            "description": "ip address to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          }
+        }
+      }
+    },
+    "/{creatorid}/screenshot_requests/{application_id}": {
+      "get": {
+        "tags": [
+          "Global"
+        ],
+        "summary": "Generate screenshots of application",
+        "description": "",
+        "operationId": "screenshot_requests",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "application_id",
+            "in": "path",
+            "description": "ID of application",
+            "required": true,
+            "type": "integer",
+            "format": "int64"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Generate screenshot of DbFace application"
+          }
+        }
+      }
+    },
+    "/{creatorid}/create_snapshot": {
+      "get": {
+        "tags": [
+          "Global"
+        ],
+        "summary": "Create Snapshot from API",
+        "description": "",
+        "operationId": "create_snapshot",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+        ],
+        "responses": {
+          "200": {
+            "description": "Create Snapshot from API, you will find the snapshots File URL from the response"
+          }
+        }
+      }
+    },
+    "/{creatorid}/all_apps": {
+      "get": {
+        "tags": [
+          "Global"
+        ],
+        "summary": "Get applications meta data in DbFace",
+        "description": "",
+        "operationId": "all_apps",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "datasource",
+            "in": "path",
+            "description": "ID of database connection",
+            "required": false,
+            "type": "string",
+            "format": "string"
+          },
+          {
+            "name": "user",
+            "in": "path",
+            "description": "User name",
+            "required": false,
+            "type": "string",
+            "format": "string"
+          },
+          {
+            "name": "group",
+            "in": "path",
+            "description": "User Group Name",
+            "required": false,
+            "type": "string",
+            "format": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List all applications in DbFace."
+          }
+        }
+      }
+    },
+    "/{creatorid}/_cloud/{function_name}": {
+      "get": {
+        "tags": [
+          "Cloud Function"
+        ],
+        "summary": "Execute DbFace Cloud function",
+        "description": "",
+        "operationId": "_cloud",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "function_name",
+            "in": "function",
+            "description": "cloud function name defined in DbFace (functions.php)",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The function execution result."
+          }
+        }
+      }
+    },
+    "/{creatorid}/_w/find": {
+      "post": {
+        "tags": [
+          "Warehouse"
+        ],
+        "summary": "Find result set by JSON query statement. ",
+        "description": "",
+        "operationId": "_w",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "content",
+            "in": "function",
+            "description": "Find json query statement. {\"table\" : \"table name\", \"where\" : {...}} or {\"search\" : \"row sql query\"}",
+            "required": true,
+            "type": "json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The function execution result."
+          }
+        }
+      }
+    },
+    "/{creatorid}/_w/save": {
+      "post": {
+        "tags": [
+          "Warehouse"
+        ],
+        "summary": "Save data in warehouse table. Create table automatically if not exists",
+        "description": "",
+        "operationId": "_w",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "content",
+            "in": "function",
+            "description": "Save data json query statement",
+            "required": true,
+            "type": "json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The function execution result."
+          }
+        }
+      }
+    },
+    "/{creatorid}/_w/delete": {
+      "post": {
+        "tags": [
+          "Warehouse"
+        ],
+        "summary": "Delete data by query statement.",
+        "description": "",
+        "operationId": "_w",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "content",
+            "in": "function",
+            "description": "Delete data by json query statement. {table: tablename, where: your-query-statement}",
+            "required": true,
+            "type": "json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The function execution result."
+          }
+        }
+      }
+    },
+    "/{creatorid}/_w/truncate": {
+      "post": {
+        "tags": [
+          "Warehouse"
+        ],
+        "summary": "Truncate warehouse table, all data will be removed.",
+        "description": "",
+        "operationId": "_w",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "content",
+            "in": "function",
+            "description": "Delete all data in table (keep table itself). {\"table\" : \"table-name\"}",
+            "required": true,
+            "type": "json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The function execution result."
+          }
+        }
+      }
+    },
+
+    "/{creatorid}/_w/drop": {
+      "post": {
+        "tags": [
+          "Warehouse"
+        ],
+        "summary": "Drop warehouse table, all table data will be removed and table will be dropped.",
+        "description": "",
+        "operationId": "_w",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "content",
+            "in": "function",
+            "description": "Delete data by json query statement. {\"table\" : \"dropped-table-name\"}",
+            "required": true,
+            "type": "json"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "The function execution result. {\"result\" : \"ok\", \"table\" : \"dropped table name\"}"
+          }
+        }
+      }
+    }
+  },
+  "externalDocs": {
+    "description": "Find out more about DbFace API",
+    "url": "https://docs.dbface.com"
+  }
+}

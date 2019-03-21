@@ -1,0 +1,22 @@
+{
+  "name": "Base Card",
+  "template": "index.tpl",
+  "description": "Basic card template",
+  "container": "none",
+  "fields" : [
+    {
+      "label": "Title",
+      "type": "string",
+      "name": "title",
+      "default": "Card Title",
+      "required": true
+    },
+    {
+      "label": "Content",
+      "type": "string",
+      "name": "content",
+      "default": "Card Content",
+      "required": true
+    }
+  ]
+}

@@ -1,0 +1,98 @@
+{
+    "type": "container",
+    "templateName":"Template8",
+    "items": [
+        {
+            "type": "scalingAbsolute",
+            "css": "templateBox aspectRatio_default",
+            "items": [
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz1",
+                    "style": {
+                        "top": "0%",
+                        "left": "0%",
+                        "right": "50%",
+                        "bottom": "50%"
+                    }
+                },
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz2",
+                    "css" :"noBorderLeft",
+                    "style": {
+                        "top": "0%",
+                        "left": "50%",
+                        "right": "0%",
+                        "bottom": "50%"
+                    }
+                },
+                 {
+                    "type": "templateDropZone",
+                    "templateName":"dz3",
+                    "css" :"noBorderTop",
+                    "style": {
+                        "top": "50%",
+                        "left": "0%",
+                        "right": "66.7%",
+                        "bottom": "25%"
+                    }
+                },
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz4",
+                    "css" :"noBorderLeft noBorderTop",
+                    "style": {
+                        "top": "50%",
+                        "left": "33.3%",
+                        "right": "33.4%",
+                        "bottom": "25%"
+                    }
+                },
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz5",
+                    "css" :"noBorderLeft noBorderTop",
+                    "style": {
+                        "top": "50%",
+                        "left": "66.6%",
+                        "right": "0%",
+                        "bottom": "25%"
+                    }
+                },
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz6",
+                    "css" :"noBorderTop",
+                    "style": {
+                        "top": "75%",
+                        "left": "0%",
+                        "right": "66.7%",
+                        "bottom": "0%"
+                    }
+                },
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz7",
+                    "css" :"noBorderLeft noBorderTop",
+                    "style": {
+                        "top": "75%",
+                        "left": "33.3%",
+                        "right": "33.4%",
+                        "bottom": "0%"
+                    }
+                },
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz8",
+                    "css" :"noBorderLeft noBorderTop",
+                    "style": {
+                        "top": "75%",
+                        "left": "66.6%",
+                        "right": "0%",
+                        "bottom": "0%"
+                    }
+                }]
+        }
+    ]
+}

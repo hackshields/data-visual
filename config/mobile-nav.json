@@ -1,0 +1,26 @@
+[
+      {
+        "section": "Application",
+        "text": "Adaptive Usage",
+        "url": "ma/1457",
+        "title": {
+            "kendo-ui": "Kendo UI Grid Adaptive Demo"
+        },
+        "meta": {
+            "kendo-ui": ""
+        }
+      },
+      {
+        "section": "Application",
+        "text": "Adaptive Usage",
+        "new": "true",
+        "url": "ma/1458",
+        "title": {
+            "kendo-ui": "Kendo UI Scheduler Adaptive Demo"
+        },
+        "meta": {
+            "kendo-ui": ""
+        }
+      }
+
+]

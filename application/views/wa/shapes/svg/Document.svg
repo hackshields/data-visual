@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="staticContent" height="100%" width="100%"
+	 preserveAspectRatio="none" viewBox="0 0 32 32">
+	<g id="Document">
+	<path fill="#666666" d="M18.2,0L4.8,0C3.8,0,3,0.8,3,1.9v28.3c0,1,0.8,1.9,1.9,1.9h22.4c1,0,1.9-0.8,1.9-1.9V9.5
+		c0-0.5-0.2-1.1-0.7-1.4l-8.9-7.6C19.1,0.2,18.7,0,18.2,0z M26.1,9.9v18.9c0,0.3-0.2,0.5-0.5,0.5H6.4c-0.3,0-0.5-0.2-0.5-0.5V3.2
+		c0-0.3,0.2-0.5,0.5-0.5h12l0,5.5c0,0.9,0.7,1.6,1.6,1.6H26.1"/>
+		<rect x="9.7" y="11.7" fill="#666666" width="12.8" height="2.5"/>
+		<rect x="9.7" y="16.8" fill="#666666" width="12.8" height="2.5"/>
+		<rect x="9.7" y="21.7" fill="#666666" width="6.4" height="2.5"/>
+</g>
+
+<polygon style="fill:none!important;stroke:none!important;pointer-events:all!important" points="4,1 18,1 28,10 28,31 4,31" />
+</svg>

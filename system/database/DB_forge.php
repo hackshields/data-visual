@@ -1,0 +1,907 @@
+<?php 
+defined("BASEPATH") or exit( "No direct script access allowed" );
+
+/**
+ * Database Forge Class
+ *
+ * @category	Database
+ * @author		EllisLab Dev Team
+ * @link		https://codeigniter.com/user_guide/database/
+ */
+
+abstract class CI_DB_forge
+{
+/**
+	 * Database object
+	 *
+	 * @var	object
+	 */
+    protected $db = NULL;
+/**
+	 * Fields data
+	 *
+	 * @var	array
+	 */
+    public $fields = array(  );
+/**
+	 * Keys data
+	 *
+	 * @var	array
+	 */
+    public $keys = array(  );
+/**
+	 * Primary Keys data
+	 *
+	 * @var	array
+	 */
+    public $primary_keys = array(  );
+/**
+	 * Database character set
+	 *
+	 * @var	string
+	 */
+    public $db_char_set = "";
+/**
+	 * CREATE DATABASE statement
+	 *
+	 * @var	string
+	 */
+    protected $_create_database = "CREATE DATABASE %s";
+/**
+	 * DROP DATABASE statement
+	 *
+	 * @var	string
+	 */
+    protected $_drop_database = "DROP DATABASE %s";
+/**
+	 * CREATE TABLE statement
+	 *
+	 * @var	string
+	 */
+    protected $_create_table = "%s %s (%s\n)";
+/**
+	 * CREATE TABLE IF statement
+	 *
+	 * @var	string
+	 */
+    protected $_create_table_if = "CREATE TABLE IF NOT EXISTS";
+/**
+	 * CREATE TABLE keys flag
+	 *
+	 * Whether table keys are created from within the
+	 * CREATE TABLE statement.
+	 *
+	 * @var	bool
+	 */
+    protected $_create_table_keys = false;
+/**
+	 * DROP TABLE IF EXISTS statement
+	 *
+	 * @var	string
+	 */
+    protected $_drop_table_if = "DROP TABLE IF EXISTS";
+/**
+	 * RENAME TABLE statement
+	 *
+	 * @var	string
+	 */
+    protected $_rename_table = "ALTER TABLE %s RENAME TO %s;";
+/**
+	 * UNSIGNED support
+	 *
+	 * @var	bool|array
+	 */
+    protected $_unsigned = true;
+/**
+	 * NULL value representation in CREATE/ALTER TABLE statements
+	 *
+	 * @var	string
+	 */
+    protected $_null = "";
+/**
+	 * DEFAULT value representation in CREATE/ALTER TABLE statements
+	 *
+	 * @var	string
+	 */
+    protected $_default = " DEFAULT ";
+
+    /**
+	 * Class constructor
+	 *
+	 * @param	object	&$db	Database object
+	 * @return	void
+	 */
+
+    public function __construct(&$db)
+    {
+        $this->db =& $db;
+        log_message("info", "Database Forge Class Initialized");
+    }
+
+    /**
+	 * Create database
+	 *
+	 * @param	string	$db_name
+	 * @return	bool
+	 */
+
+    public function create_database($db_name)
+    {
+        if( $this->_create_database === false ) 
+        {
+            return ($this->db->db_debug ? $this->db->display_error("db_unsupported_feature") : false);
+        }
+
+        if( !$this->db->query(sprintf($this->_create_database, $db_name, $this->db->char_set, $this->db->dbcollat)) ) 
+        {
+            return ($this->db->db_debug ? $this->db->display_error("db_unable_to_drop") : false);
+        }
+
+        if( !empty($this->db->data_cache["db_names"]) ) 
+        {
+            $this->db->data_cache["db_names"][] = $db_name;
+        }
+
+        return true;
+    }
+
+    /**
+	 * Drop database
+	 *
+	 * @param	string	$db_name
+	 * @return	bool
+	 */
+
+    public function drop_database($db_name)
+    {
+        if( $this->_drop_database === false ) 
+        {
+            return ($this->db->db_debug ? $this->db->display_error("db_unsupported_feature") : false);
+        }
+
+        if( !$this->db->query(sprintf($this->_drop_database, $db_name)) ) 
+        {
+            return ($this->db->db_debug ? $this->db->display_error("db_unable_to_drop") : false);
+        }
+
+        if( !empty($this->db->data_cache["db_names"]) ) 
+        {
+            $key = array_search(strtolower($db_name), array_map("strtolower", $this->db->data_cache["db_names"]), true);
+            if( $key !== false ) 
+            {
+                unset($this->db->data_cache["db_names"][$key]);
+            }
+
+        }
+
+        return true;
+    }
+
+    /**
+	 * Add Key
+	 *
+	 * @param	string	$key
+	 * @param	bool	$primary
+	 * @return	CI_DB_forge
+	 */
+
+    public function add_key($key, $primary = false)
+    {
+        if( $primary === true && is_array($key) ) 
+        {
+            foreach( $key as $one ) 
+            {
+                $this->add_key($one, $primary);
+            }
+            return $this;
+        }
+        else
+        {
+            if( $primary === true ) 
+            {
+                $this->primary_keys[] = $key;
+            }
+            else
+            {
+                $this->keys[] = $key;
+            }
+
+            return $this;
+        }
+
+    }
+
+    /**
+	 * Add Field
+	 *
+	 * @param	array	$field
+	 * @return	CI_DB_forge
+	 */
+
+    public function add_field($field)
+    {
+        if( is_string($field) ) 
+        {
+            if( $field === "id" ) 
+            {
+                $this->add_field(array( "id" => array( "type" => "INT", "constraint" => 9, "auto_increment" => true ) ));
+                $this->add_key("id", true);
+            }
+            else
+            {
+                if( strpos($field, " ") === false ) 
+                {
+                    show_error("Field information is required for that operation.");
+                }
+
+                $this->fields[] = $field;
+            }
+
+        }
+
+        if( is_array($field) ) 
+        {
+            $this->fields = array_merge($this->fields, $field);
+        }
+
+        return $this;
+    }
+
+    /**
+	 * Create Table
+	 *
+	 * @param	string	$table		Table name
+	 * @param	bool	$if_not_exists	Whether to add IF NOT EXISTS condition
+	 * @param	array	$attributes	Associative array of table attributes
+	 * @return	bool
+	 */
+
+    public function create_table($table, $if_not_exists = false, array $attributes = array(  ))
+    {
+        if( $table === "" ) 
+        {
+            show_error("A table name is required for that operation.");
+        }
+        else
+        {
+            $table = $this->db->dbprefix . $table;
+        }
+
+        if( count($this->fields) === 0 ) 
+        {
+            show_error("Field information is required.");
+        }
+
+        $sql = $this->_create_table($table, $if_not_exists, $attributes);
+        if( is_bool($sql) ) 
+        {
+            $this->_reset();
+            if( $sql === false ) 
+            {
+                return ($this->db->db_debug ? $this->db->display_error("db_unsupported_feature") : false);
+            }
+
+        }
+
+        if( ($result = $this->db->query($sql)) !== false ) 
+        {
+            empty($this->db->data_cache["table_names"]) or $this->db->data_cache["table_names"][] = $table;
+            if( !empty($this->keys) ) 
+            {
+                $i = 0;
+                $sqls = $this->_process_indexes($table);
+                for( $c = count($sqls); $i < $c; $i++ ) 
+                {
+                    $this->db->query($sqls[$i]);
+                }
+            }
+
+        }
+
+        $this->_reset();
+        return $result;
+    }
+
+    /**
+	 * Create Table
+	 *
+	 * @param	string	$table		Table name
+	 * @param	bool	$if_not_exists	Whether to add 'IF NOT EXISTS' condition
+	 * @param	array	$attributes	Associative array of table attributes
+	 * @return	mixed
+	 */
+
+    protected function _create_table($table, $if_not_exists, $attributes)
+    {
+        if( $if_not_exists === true && $this->_create_table_if === false ) 
+        {
+            if( $this->db->table_exists($table) ) 
+            {
+                return true;
+            }
+
+            $if_not_exists = false;
+        }
+
+        $sql = ($if_not_exists ? sprintf($this->_create_table_if, $this->db->escape_identifiers($table)) : "CREATE TABLE");
+        $columns = $this->_process_fields(true);
+        $i = 0;
+        for( $c = count($columns); $i < $c; $i++ ) 
+        {
+            $columns[$i] = ($columns[$i]["_literal"] !== false ? "\n\t" . $columns[$i]["_literal"] : "\n\t" . $this->_process_column($columns[$i]));
+        }
+        $columns = implode(",", $columns) . $this->_process_primary_keys($table);
+        if( $this->_create_table_keys === true ) 
+        {
+            $columns .= $this->_process_indexes($table);
+        }
+
+        $sql = sprintf($this->_create_table . "%s", $sql, $this->db->escape_identifiers($table), $columns, $this->_create_table_attr($attributes));
+        return $sql;
+    }
+
+    /**
+	 * CREATE TABLE attributes
+	 *
+	 * @param	array	$attributes	Associative array of table attributes
+	 * @return	string
+	 */
+
+    protected function _create_table_attr($attributes)
+    {
+        $sql = "";
+        foreach( array_keys($attributes) as $key ) 
+        {
+            if( is_string($key) ) 
+            {
+                $sql .= " " . strtoupper($key) . " " . $attributes[$key];
+            }
+
+        }
+        return $sql;
+    }
+
+    /**
+	 * Drop Table
+	 *
+	 * @param	string	$table_name	Table name
+	 * @param	bool	$if_exists	Whether to add an IF EXISTS condition
+	 * @return	bool
+	 */
+
+    public function drop_table($table_name, $if_exists = false)
+    {
+        if( $table_name === "" ) 
+        {
+            return ($this->db->db_debug ? $this->db->display_error("db_table_name_required") : false);
+        }
+
+        if( ($query = $this->_drop_table($this->db->dbprefix . $table_name, $if_exists)) === true ) 
+        {
+            return true;
+        }
+
+        $query = $this->db->query($query);
+        if( $query && !empty($this->db->data_cache["table_names"]) ) 
+        {
+            $key = array_search(strtolower($this->db->dbprefix . $table_name), array_map("strtolower", $this->db->data_cache["table_names"]), true);
+            if( $key !== false ) 
+            {
+                unset($this->db->data_cache["table_names"][$key]);
+            }
+
+        }
+
+        return $query;
+    }
+
+    /**
+	 * Drop Table
+	 *
+	 * Generates a platform-specific DROP TABLE string
+	 *
+	 * @param	string	$table		Table name
+	 * @param	bool	$if_exists	Whether to add an IF EXISTS condition
+	 * @return	string
+	 */
+
+    protected function _drop_table($table, $if_exists)
+    {
+        $sql = "DROP TABLE";
+        if( $if_exists ) 
+        {
+            if( $this->_drop_table_if === false ) 
+            {
+                if( !$this->db->table_exists($table) ) 
+                {
+                    return true;
+                }
+
+            }
+            else
+            {
+                $sql = sprintf($this->_drop_table_if, $this->db->escape_identifiers($table));
+            }
+
+        }
+
+        return $sql . " " . $this->db->escape_identifiers($table);
+    }
+
+    /**
+	 * Rename Table
+	 *
+	 * @param	string	$table_name	Old table name
+	 * @param	string	$new_table_name	New table name
+	 * @return	bool
+	 */
+
+    public function rename_table($table_name, $new_table_name)
+    {
+        if( $table_name === "" || $new_table_name === "" ) 
+        {
+            show_error("A table name is required for that operation.");
+            return false;
+        }
+
+        if( $this->_rename_table === false ) 
+        {
+            return ($this->db->db_debug ? $this->db->display_error("db_unsupported_feature") : false);
+        }
+
+        $result = $this->db->query(sprintf($this->_rename_table, $this->db->escape_identifiers($this->db->dbprefix . $table_name), $this->db->escape_identifiers($this->db->dbprefix . $new_table_name)));
+        if( $result && !empty($this->db->data_cache["table_names"]) ) 
+        {
+            $key = array_search(strtolower($this->db->dbprefix . $table_name), array_map("strtolower", $this->db->data_cache["table_names"]), true);
+            if( $key !== false ) 
+            {
+                $this->db->data_cache["table_names"][$key] = $this->db->dbprefix . $new_table_name;
+            }
+
+        }
+
+        return $result;
+    }
+
+    /**
+	 * Column Add
+	 *
+	 * @todo	Remove deprecated $_after option in 3.1+
+	 * @param	string	$table	Table name
+	 * @param	array	$field	Column definition
+	 * @param	string	$_after	Column for AFTER clause (deprecated)
+	 * @return	bool
+	 */
+
+    public function add_column($table, $field, $_after = NULL)
+    {
+        is_array($field) or foreach( array_keys($field) as $k ) 
+{
+    if( $_after !== NULL && is_array($field[$k]) && !isset($field[$k]["after"]) ) 
+    {
+        $field[$k]["after"] = $_after;
+    }
+
+    $this->add_field(array( $k => $field[$k] ));
+}
+        $sqls = $this->_alter_table("ADD", $this->db->dbprefix . $table, $this->_process_fields());
+        $this->_reset();
+        if( $sqls === false ) 
+        {
+            return ($this->db->db_debug ? $this->db->display_error("db_unsupported_feature") : false);
+        }
+
+        $i = 0;
+        for( $c = count($sqls); $i < $c; $i++ ) 
+        {
+            if( $this->db->query($sqls[$i]) === false ) 
+            {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
+    /**
+	 * Column Drop
+	 *
+	 * @param	string	$table		Table name
+	 * @param	string	$column_name	Column name
+	 * @return	bool
+	 */
+
+    public function drop_column($table, $column_name)
+    {
+        $sql = $this->_alter_table("DROP", $this->db->dbprefix . $table, $column_name);
+        if( $sql === false ) 
+        {
+            return ($this->db->db_debug ? $this->db->display_error("db_unsupported_feature") : false);
+        }
+
+        return $this->db->query($sql);
+    }
+
+    /**
+	 * Column Modify
+	 *
+	 * @param	string	$table	Table name
+	 * @param	string	$field	Column definition
+	 * @return	bool
+	 */
+
+    public function modify_column($table, $field)
+    {
+        is_array($field) or foreach( array_keys($field) as $k ) 
+{
+    $this->add_field(array( $k => $field[$k] ));
+}
+        if( count($this->fields) === 0 ) 
+        {
+            show_error("Field information is required.");
+        }
+
+        $sqls = $this->_alter_table("CHANGE", $this->db->dbprefix . $table, $this->_process_fields());
+        $this->_reset();
+        if( $sqls === false ) 
+        {
+            return ($this->db->db_debug ? $this->db->display_error("db_unsupported_feature") : false);
+        }
+
+        $i = 0;
+        for( $c = count($sqls); $i < $c; $i++ ) 
+        {
+            if( $this->db->query($sqls[$i]) === false ) 
+            {
+                return false;
+            }
+
+        }
+        return true;
+    }
+
+    /**
+	 * ALTER TABLE
+	 *
+	 * @param	string	$alter_type	ALTER type
+	 * @param	string	$table		Table name
+	 * @param	mixed	$field		Column definition
+	 * @return	string|string[]
+	 */
+
+    protected function _alter_table($alter_type, $table, $field)
+    {
+        $sql = "ALTER TABLE " . $this->db->escape_identifiers($table) . " ";
+        if( $alter_type === "DROP" ) 
+        {
+            return $sql . "DROP COLUMN " . $this->db->escape_identifiers($field);
+        }
+
+        $sql .= ($alter_type === "ADD" ? "ADD " : $alter_type . " COLUMN ");
+        $sqls = array(  );
+        $i = 0;
+        for( $c = count($field); $i < $c; $i++ ) 
+        {
+            $sqls[] = $sql . (($field[$i]["_literal"] !== false ? $field[$i]["_literal"] : $this->_process_column($field[$i])));
+        }
+        return $sqls;
+    }
+
+    /**
+	 * Process fields
+	 *
+	 * @param	bool	$create_table
+	 * @return	array
+	 */
+
+    protected function _process_fields($create_table = false)
+    {
+        $fields = array(  );
+        foreach( $this->fields as $key => $attributes ) 
+        {
+            if( is_int($key) && !is_array($attributes) ) 
+            {
+                $fields[] = array( "_literal" => $attributes );
+                continue;
+            }
+
+            $attributes = array_change_key_case($attributes, CASE_UPPER);
+            if( $create_table === true && empty($attributes["TYPE"]) ) 
+            {
+                continue;
+            }
+
+            isset($attributes["TYPE"]) and $this->_attr_type($attributes);
+            $field = array( "name" => $key, "new_name" => (isset($attributes["NAME"]) ? $attributes["NAME"] : NULL), "type" => (isset($attributes["TYPE"]) ? $attributes["TYPE"] : NULL), "length" => "", "unsigned" => "", "null" => "", "unique" => "", "default" => "", "auto_increment" => "", "_literal" => false );
+            isset($attributes["TYPE"]) and $this->_attr_unsigned($attributes, $field);
+            if( $create_table === false ) 
+            {
+                if( isset($attributes["AFTER"]) ) 
+                {
+                    $field["after"] = $attributes["AFTER"];
+                }
+                else
+                {
+                    if( isset($attributes["FIRST"]) ) 
+                    {
+                        $field["first"] = (bool) $attributes["FIRST"];
+                    }
+
+                }
+
+            }
+
+            $this->_attr_default($attributes, $field);
+            if( isset($attributes["NULL"]) ) 
+            {
+                if( $attributes["NULL"] === true ) 
+                {
+                    $field["null"] = (empty($this->_null) ? "" : " " . $this->_null);
+                }
+                else
+                {
+                    $field["null"] = " NOT NULL";
+                }
+
+            }
+            else
+            {
+                if( $create_table === true ) 
+                {
+                    $field["null"] = " NOT NULL";
+                }
+
+            }
+
+            $this->_attr_auto_increment($attributes, $field);
+            $this->_attr_unique($attributes, $field);
+            if( isset($attributes["COMMENT"]) ) 
+            {
+                $field["comment"] = $this->db->escape($attributes["COMMENT"]);
+            }
+
+            if( isset($attributes["TYPE"]) && !empty($attributes["CONSTRAINT"]) ) 
+            {
+                switch( strtoupper($attributes["TYPE"]) ) 
+                {
+                    case "ENUM":
+                    case "SET":
+                        $attributes["CONSTRAINT"] = $this->db->escape($attributes["CONSTRAINT"]);
+                    default:
+                        $field["length"] = (is_array($attributes["CONSTRAINT"]) ? "(" . implode(",", $attributes["CONSTRAINT"]) . ")" : "(" . $attributes["CONSTRAINT"] . ")");
+                        break;
+                }
+            }
+
+            $fields[] = $field;
+        }
+        return $fields;
+    }
+
+    /**
+	 * Process column
+	 *
+	 * @param	array	$field
+	 * @return	string
+	 */
+
+    protected function _process_column($field)
+    {
+        return $this->db->escape_identifiers($field["name"]) . " " . $field["type"] . $field["length"] . $field["unsigned"] . $field["default"] . $field["null"] . $field["auto_increment"] . $field["unique"];
+    }
+
+    /**
+	 * Field attribute TYPE
+	 *
+	 * Performs a data type mapping between different databases.
+	 *
+	 * @param	array	&$attributes
+	 * @return	void
+	 */
+
+    protected function _attr_type(&$attributes)
+    {
+    }
+
+    /**
+	 * Field attribute UNSIGNED
+	 *
+	 * Depending on the _unsigned property value:
+	 *
+	 *	- TRUE will always set $field['unsigned'] to 'UNSIGNED'
+	 *	- FALSE will always set $field['unsigned'] to ''
+	 *	- array(TYPE) will set $field['unsigned'] to 'UNSIGNED',
+	 *		if $attributes['TYPE'] is found in the array
+	 *	- array(TYPE => UTYPE) will change $field['type'],
+	 *		from TYPE to UTYPE in case of a match
+	 *
+	 * @param	array	&$attributes
+	 * @param	array	&$field
+	 * @return	void
+	 */
+
+    protected function _attr_unsigned(&$attributes, &$field)
+    {
+        if( empty($attributes["UNSIGNED"]) || $attributes["UNSIGNED"] !== true ) 
+        {
+            return NULL;
+        }
+
+        $attributes["UNSIGNED"] = false;
+        if( is_array($this->_unsigned) ) 
+        {
+            foreach( array_keys($this->_unsigned) as $key ) 
+            {
+                if( is_int($key) && strcasecmp($attributes["TYPE"], $this->_unsigned[$key]) === 0 ) 
+                {
+                    $field["unsigned"] = " UNSIGNED";
+                    return NULL;
+                }
+
+                if( is_string($key) && strcasecmp($attributes["TYPE"], $key) === 0 ) 
+                {
+                    $field["type"] = $key;
+                    return NULL;
+                }
+
+            }
+            return NULL;
+        }
+        else
+        {
+            $field["unsigned"] = ($this->_unsigned === true ? " UNSIGNED" : "");
+        }
+
+    }
+
+    /**
+	 * Field attribute DEFAULT
+	 *
+	 * @param	array	&$attributes
+	 * @param	array	&$field
+	 * @return	void
+	 */
+
+    protected function _attr_default(&$attributes, &$field)
+    {
+        if( $this->_default === false ) 
+        {
+            return NULL;
+        }
+
+        if( array_key_exists("DEFAULT", $attributes) ) 
+        {
+            if( $attributes["DEFAULT"] === NULL ) 
+            {
+                $field["default"] = (empty($this->_null) ? "" : $this->_default . $this->_null);
+                $attributes["NULL"] = true;
+                $field["null"] = (empty($this->_null) ? "" : " " . $this->_null);
+            }
+            else
+            {
+                $field["default"] = $this->_default . $this->db->escape($attributes["DEFAULT"]);
+            }
+
+        }
+
+    }
+
+    /**
+	 * Field attribute UNIQUE
+	 *
+	 * @param	array	&$attributes
+	 * @param	array	&$field
+	 * @return	void
+	 */
+
+    protected function _attr_unique(&$attributes, &$field)
+    {
+        if( !empty($attributes["UNIQUE"]) && $attributes["UNIQUE"] === true ) 
+        {
+            $field["unique"] = " UNIQUE";
+        }
+
+    }
+
+    /**
+	 * Field attribute AUTO_INCREMENT
+	 *
+	 * @param	array	&$attributes
+	 * @param	array	&$field
+	 * @return	void
+	 */
+
+    protected function _attr_auto_increment(&$attributes, &$field)
+    {
+        if( !empty($attributes["AUTO_INCREMENT"]) && $attributes["AUTO_INCREMENT"] === true && stripos($field["type"], "int") !== false ) 
+        {
+            $field["auto_increment"] = " AUTO_INCREMENT";
+        }
+
+    }
+
+    /**
+	 * Process primary keys
+	 *
+	 * @param	string	$table	Table name
+	 * @return	string
+	 */
+
+    protected function _process_primary_keys($table)
+    {
+        $sql = "";
+        $i = 0;
+        for( $c = count($this->primary_keys); $i < $c; $i++ ) 
+        {
+            if( !isset($this->fields[$this->primary_keys[$i]]) ) 
+            {
+                unset($this->primary_keys[$i]);
+            }
+
+        }
+        if( 0 < count($this->primary_keys) ) 
+        {
+            $sql .= ",\n\tCONSTRAINT " . $this->db->escape_identifiers("pk_" . $table) . " PRIMARY KEY(" . implode(", ", $this->db->escape_identifiers($this->primary_keys)) . ")";
+        }
+
+        return $sql;
+    }
+
+    /**
+	 * Process indexes
+	 *
+	 * @param	string	$table
+	 * @return	string
+	 */
+
+    protected function _process_indexes($table)
+    {
+        $sqls = array(  );
+        $i = 0;
+        for( $c = count($this->keys); $i < $c; $i++ ) 
+        {
+            if( is_array($this->keys[$i]) ) 
+            {
+                $i2 = 0;
+                for( $c2 = count($this->keys[$i]); $i2 < $c2; $i2++ ) 
+                {
+                    if( !isset($this->fields[$this->keys[$i][$i2]]) ) 
+                    {
+                        unset($this->keys[$i][$i2]);
+                        continue;
+                    }
+
+                }
+            }
+            else
+            {
+                if( !isset($this->fields[$this->keys[$i]]) ) 
+                {
+                    unset($this->keys[$i]);
+                    continue;
+                }
+
+            }
+
+            is_array($this->keys[$i]) or $this->keys[$i] = array( $this->keys[$i] );
+            $sqls[] = "CREATE INDEX " . $this->db->escape_identifiers($table . "_" . implode("_", $this->keys[$i])) . " ON " . $this->db->escape_identifiers($table) . " (" . implode(", ", $this->db->escape_identifiers($this->keys[$i])) . ");";
+        }
+        return $sqls;
+    }
+
+    /**
+	 * Reset
+	 *
+	 * Resets table creation vars
+	 *
+	 * @return	void
+	 */
+
+    protected function _reset()
+    {
+        $this->fields = $this->keys = $this->primary_keys = array(  );
+    }
+
+}
+
+

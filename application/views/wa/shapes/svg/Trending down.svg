@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" version="1.1" class="staticContent" height="100%" width="100%"
+     preserveAspectRatio="none" viewBox="0 0 32 32">
+
+    <path fill="#666666" d="M31.4,21.6l-3,2.1l-8.5-12.2c-0.5-0.8-1.6-1-2.4-0.5l-6,3.9L3.2,3c-0.4-0.5-1-0.8-1.5-0.7
+	C1.3,2.2,1,2.3,0.7,2.5C0,3.1-0.2,4.2,0.3,5l9.3,13.3c0.5,0.8,1.6,1,2.4,0.5l6-3.9l7.6,10.8l-3,2.1c-0.3,0.2-0.2,0.7,0.2,0.7
+	l7.5,1.3c0.2,0,0.4-0.1,0.5-0.3L32,22C32.1,21.6,31.7,21.4,31.4,21.6z"/>
+
+    <polygon style="fill:none!important;stroke:none!important;pointer-events:all!important"
+             points="0,0 10,0 32,22 32,32 22,32 0,10"/>
+</svg>

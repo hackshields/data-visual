@@ -1,0 +1,67 @@
+{
+    "type": "container",
+    "templateName":"Template4",
+    "items": [
+        {
+            "type": "scalingAbsolute",
+            "css": "templateBox aspectRatio_default",
+
+            "items": [
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz1",
+                    "style": {
+                        "top": "0%",
+                        "left": "0%",
+                        "right": "75%",
+                        "bottom": "75%"
+                    }
+                },
+                 {
+                    "type": "templateDropZone",
+                    "templateName":"dz3",
+                    "css" :"noBorderLeft",
+                    "style": {
+                        "top": "0%",
+                        "left": "25%",
+                        "right": "50%",
+                        "bottom": "75%"
+                    }
+                },
+                 {
+                    "type": "templateDropZone",
+                    "templateName":"dz4",
+                    "css" :"noBorderLeft",
+                    "style": {
+                        "top": "0%",
+                        "left": "50%",
+                        "right": "25%",
+                        "bottom": "75%"
+                    }
+                },
+                 {
+                    "type": "templateDropZone",
+                    "templateName":"dz5",
+                    "css" :"noBorderLeft",
+                    "style": {
+                        "top": "0%",
+                        "left": "75%",
+                        "right": "00%",
+                        "bottom": "75%"
+                    }
+                },
+                {
+                    "type": "templateDropZone",
+                    "templateName":"dz2",
+                    "css" :"noBorderTop",
+                    "style": {
+                        "top": "25%",
+                        "left": "0%",
+                        "right": "0%",
+                        "bottom": "0%"
+                    }
+                }
+            ]
+        }
+    ]
+}

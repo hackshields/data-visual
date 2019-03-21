@@ -1,0 +1,21 @@
+{
+    "type": "container",
+    "templateName":"Template1",
+    "items": [
+        {
+            "type": "scalingAbsolute",
+            "css": "templateBox aspectRatio_default",
+            "items": [
+                {
+                    "type": "templateDropZone",
+                    "style": {
+                        "top": "0%",
+                        "left": "0%",
+                        "right": "0%",
+                        "bottom": "0%"
+                    }
+                }
+            ]
+        }
+    ]
+}

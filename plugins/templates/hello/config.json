@@ -1,0 +1,14 @@
+{
+  "name": "Hello world",
+  "template": "index.tpl",
+  "description": "The simplest html template",
+  "fields" : [
+    {
+      "label": "Variable",
+      "type": "string",
+      "name": "variable",
+      "default": "hello world",
+      "required": true
+    }
+  ]
+}

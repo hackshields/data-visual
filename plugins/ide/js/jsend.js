@@ -1,0 +1,1 @@
+!function(r,s){var o=r.codiad;o.jsend={parse:function(r){var e=s.parseJSON(r);if(void 0!==e.debug&&Array.isArray(e.debug)){var a=e.debug.join("\nDEBUG: ");""!==a&&(a="DEBUG: "+a),console.log(a)}return"error"==e.status?(o.message.error(e.message),"error"):e.data}}}(this,jQuery);
